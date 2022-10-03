@@ -206,8 +206,8 @@ router.post('/signin', (req, res)=>{
                 // res.status(200).json({message:"Successfully signedin !!"})
                 // res.redirect('/home');
                 const token = jwt.sign({_id:savedUser._id}, process.env.JWT_SECRET);
-                const {_id, name, username} = savedUser
-                res.json({token, user : {_id, name, username}});
+                const {_id, name, username, pic} = savedUser
+                res.json({token, user : {_id, name, username, pic}});
             }
             else{
                 return res.status(422).json({error:"Invalid Cerenditals !!"});

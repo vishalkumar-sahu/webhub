@@ -28,10 +28,10 @@ const users_schema = new mongoose.Schema({
         type : String,
         required : true
     },
-    // pic: {
-    //     type : String,
-    //     default:"https://res.cloudinary.com/vishalkumar-sahu/image/upload/v1650207188/deafult_pic_tleags.jpg"
-    // },
+    pic: {
+        type : String,
+        default:"https://res.cloudinary.com/vishalkumar-sahu/image/upload/v1650207188/deafult_pic_tleags.jpg"
+    },
     
 })
 

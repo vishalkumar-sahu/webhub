@@ -9,6 +9,9 @@ import ForgetPassword from './components/screens/forgetPassword.js';
 import VerifyForgetPasswordOTP from './components/screens/verifyForget.js';
 import ChangePassword from './components/screens/changePassword.js';
 import Home from './components/screens/home.js';
+import Profile from './components/screens/profile';
+import AddSite from './components/screens/addsite';
+import ProfilePic from './components/screens/profilePic';
 
 import {reducer, initialState} from './reducers/userReducer'
 export const UserContext = createContext()
@@ -26,7 +29,7 @@ const Routing = ()=>{
       // navigate('/home')
     }
     else{
-      // navigate('/')
+      navigate('/')
     }
   }, []);
 
@@ -39,6 +42,9 @@ const Routing = ()=>{
         <Route path='/verifyForgettenPassword' element={<VerifyForgetPasswordOTP />}/>
         <Route path='/changePassword' element={<ChangePassword />}/>
         <Route path='/home' element={<Home />}/>
+        <Route path='/profile' element={<Profile />}/>
+        <Route path='/addContribution' element={<AddSite />}/>
+        <Route path='/profile/profilePic' element={<ProfilePic />} />
     </Routes>
   )
 }
