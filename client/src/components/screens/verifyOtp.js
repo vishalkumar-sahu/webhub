@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardBody, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import '../../styles/login.css'
@@ -9,11 +9,21 @@ import M from 'materialize-css'
 const   VerifyOtp = () => {
     const navigate = useNavigate()
     const [otp, setOtp] = useState("")
+
+    const [email, setEmail] = useState("")
+    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
+    const [username, setUsername] = useState("")
+    useEffect(()=>{
+
+        setEmail(localStorage.getItem("email"));
+        setName(localStorage.getItem("name"));
+        setUsername(localStorage.getItem("username"));
+        setPassword(localStorage.getItem("password"));
+        
+    }, []);
     
-    const email = localStorage.getItem("email");
-    const name = localStorage.getItem("name");
-    const username = localStorage.getItem("username");
-    const password = localStorage.getItem("password");
+    
 
     const verifyOTP = () =>{
         fetch("/verify",{
@@ -41,6 +51,7 @@ const   VerifyOtp = () => {
                 navigate('/signup');
             }
             else{
+                M.toast({html: "Otp verified successfully !", classes:"#43a047 green darken-1"})
                 M.toast({html: data.message, classes:"#43a047 green darken-1"})
                 localStorage.removeItem("email")
                 localStorage.removeItem("name")
@@ -77,23 +88,14 @@ const   VerifyOtp = () => {
                                 <h2 className="text-uppercase text-center mb-4">OTP Verification</h2>
                                 <form method='post'>
                                 <MDBInput wrapperClass='mb-3' label='Enter Otp' type="number" maxLength={6} minLength={6} name='otp' id='form1' value={otp} onChange={(e)=>setOtp(e.target.value)} required/>
-                                {/* <MDBInput wrapperClass='mb-2' label='Password' name='password' id='form2' type='password' value={password} onChange={(e)=>setPassword(e.target.value)} required/> */}
-
-                                {/* <div className="d-flex justify-content-between mx-2 mb-3">
-                                <div></div>
-                                <a href="!#">Forgot password?</a>
-                                </div> */}
-
+                                
                                 <input className="input_ele" type="submit" value="Submit Otp" onClick={()=>verifyOTP()} />
                                 </form>
-                                {/* <MDBBtn className="mb-4">Sign in</MDBBtn> */}
 
                                 <div className="text-center">
                                 <div className="signin register">
                                     <span>Have already an account ? </span>
-                                    {/* <a role="button" href="/signup" id="signup">
-                                        Sign up
-                                    </a> */}
+                                    
                                     <Link to="/"> Login Here</Link>
                                 </div>
                                 

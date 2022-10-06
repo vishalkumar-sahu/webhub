@@ -43,17 +43,17 @@ const Signup = () => {
             })
             .then(res => res.json())
             .then(data=>{
-                console.log("send mail");
+                // console.log("send mail");
                 if(data.message){
+                    // console.log(data.message);
+                    M.toast({html: data.message, classes:"#43a047 green darken-1"});
                     navigate('/verify');
-                    console.log(data.message);
-                    // M.toast({html: data.message, classes:"#43a047 green darken-1"});
                     
             
                 }
                 else{
                     M.toast({html: data.error, classes:"#c62828 red darken-3"})
-                    navigate('/verify');
+                    // navigate('/verify');
                     // console.log(data.error);
                 }
             }).catch(err=>{
