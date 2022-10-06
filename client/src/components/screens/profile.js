@@ -4,9 +4,6 @@ import { UserContext } from "../../App";
 
 import { useNavigate, Link } from 'react-router-dom'
 import Navbar from "./navbar"
-import ghh from '../../images/ghh.png'
-
-import M from 'materialize-css'
 
 const Profile = ()=>{
 

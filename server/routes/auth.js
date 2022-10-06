@@ -14,12 +14,7 @@ dotenv.config({path: './config.env'});
 
 const requireLogin = require('../middleware/requirelogin');
 
-// const accountSid = process.env.TWILIO_ACCOUNT_SID;
-// const authToken = process.env.TWILIO_AUTH_TOKEN;
-// const client = require('twilio')(accountSid, authToken);
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN)
-
-// app.use(express.static(__dirname + '/public/'));
 
 router.post('/signup', (req, res)=>{
     const {name, username, email, password} = req.body;
@@ -34,32 +29,17 @@ router.post('/signup', (req, res)=>{
         if(!saved){
             // console.log(email);
 
-            // client.verify.services(process.env.SERVICE_ID)
-            //     .verifications
-            //     .create({to: email, channel: "email"})
-            //     .then(verification => {
-            //         console.log("Verification email sent");
-            //         res.redirect('/signup/verify');
-            //     })
-            //       .catch(error => {
-            //         console.log(error);
-            //     });
-            client
-                .verify
-                .services(process.env.SERVICE_ID)
+            client.verify.v2.services(process.env.SERVICE_ID)
                 .verifications
-                .create({
-                    to: `+918840337671`,
-                    channel: 'sms' 
-                })
-                .then(verification => {
-                    console.log("Verification email sent");
-                    console.log(verification);
-                    res.status(200).redirect("/verify");
-                    // return res.status(200).json({message:"Verfication send"});
-                    // res.redirect('/v2/verify');
-                })
-             
+                .create({to: email, channel: 'email'})
+                .then(verification => 
+                    {
+                        console.log(verification.sid)
+                        console.log("Verification email sent");
+                        res.status(200).json({message:"Verfication send"});
+                    
+                    });
+            
         }
         else{
             console.log("error occured");
@@ -71,10 +51,7 @@ router.post('/signup', (req, res)=>{
 
 router.post('/verify', async (req, res)=>{
     const {otp, email, name, username, password} = await req.body;
-    // async function run(){
-        
-    // }
-
+    
     console.log(otp);
     console.log(name);
     console.log(username);
@@ -100,7 +77,7 @@ router.post('/verify', async (req, res)=>{
                 .services(process.env.SERVICE_ID)
                 .verificationChecks
                 .create({
-                    to: '+918840337671',
+                    to: email,
                     code: otp
                 })
                 .then(data => {
@@ -128,65 +105,25 @@ router.post('/verify', async (req, res)=>{
                         .catch(err => {
                             console.log(err);
                         })
-                        // res.status(200).json({message:"Otp verified successfully !"});
-                        // res.redirect('/')
+                        
                     }
                     else{
-                        // user.deleteOne({phone : phone});
                         res.status(200).json({error:"Otp not verified successfully !"});
                     }
                 })
+
         }
         catch (error) {
             res.status(400).send(error);
         }
         
-        
-
     })
     .catch(err=>{
         console.log(err);
     })
 
-
 })
 
-// router.post('/verifyOtp', (req, res)=>{
-//     const {otp, name, username, email, password} = req.body;
-
-//     user.findOne({phone : phone})
-//     .then((saved)=>{
-//         if(saved){
-//             client
-//                 .verify
-//                 .services(process.env.SERVICE_ID)
-//                 .verificationChecks
-//                 .create({
-//                     to: `+91${phone}`,
-//                     code: otp
-//                 })
-//                 .then(data => {
-//                     if (data.status === "approved") {
-
-//                         res.status(200).json({message:"Otp verified successfully !"});
-
-//                         // res.redirect('/')
-//                     }
-//                     else{
-//                         user.deleteOne({phone : phone});
-//                         res.status(200).json({error:"Otp not verified successfully !"});
-//                     }
-//                 })
-//         }
-//         else{
-//             res.redirect('/signup')
-//         }
-//     })
-    
-
-
-
-// })
 
 router.post('/signin', (req, res)=>{
     const {email, password} = req.body;
@@ -235,14 +172,9 @@ router.post('/forgettenPassword', (req, res)=>{
     .then((savedUser)=>{
         if(savedUser){
 
-            client
-                .verify
-                .services(process.env.SERVICE_ID)
+            client.verify.v2.services(process.env.SERVICE_ID)
                 .verifications
-                .create({
-                    to: `+918058417725`,
-                    channel: 'sms' 
-                })
+                .create({to: email, channel: 'email'})
                 .then(data => {
                     console.log(data);
                     res.status(200).redirect("/verifyForgettenPassword");
@@ -273,42 +205,12 @@ router.post('/verifyForgettenPassword', async (req, res)=>{
 
     console.log(email);
 
-    // await user.findOne({email : email})
-    // .then((saved)=>{
-        
-    //     console.log(saved);
-    //     if(saved){
-    //         client
-    //             .verify
-    //             .services(process.env.SERVICE_ID)
-    //             .verificationChecks
-    //             .create({
-    //                 to: `+918058417725`,
-    //                 code: otp
-    //             })
-    //             .then(data => {
-    //                 if (data.status === "approved") {
-    //                     res.status(200).redirect("/changePassword");
-    //                     // res.status(200).json({message:"Otp verified successfully !"});
-    //                     // res.redirect('/')
-    //                 }
-    //                 else{
-    //                     // user.deleteOne({phone : phone});
-    //                     res.status(200).json({error:"Otp not verified successfully !"});
-    //                 }
-    //             })
-    //     }
-    //     else{
-    //         res.redirect('/signup')
-    //     }
-    // })
-    
     client
                 .verify
                 .services(process.env.SERVICE_ID)
                 .verificationChecks
                 .create({
-                    to: `+918058417725`,
+                    to: email,
                     code: otp
                 })
                 .then(data => {
@@ -318,7 +220,6 @@ router.post('/verifyForgettenPassword', async (req, res)=>{
                         // res.redirect('/')
                     }
                     else{
-                        // user.deleteOne({phone : phone});
                         res.status(200).json({error:"Otp not verified successfully !"});
                     }
                 })
@@ -340,8 +241,6 @@ router.post('/changePassword', (req, res)=>{
 
                 bcrypt.hash(password, 12)
                 .then(hashedpassword =>{
-                    // user.updateOne({phone}, {$set : {password : hashedpassword}})
-                    // res.status(200).json({message:"Password changed successfully !"});
 
                     user.updateOne({ email : email }, { password: hashedpassword }, function(
                         err,
