@@ -1,6 +1,6 @@
 import React,{useState, useEffect, useContext} from 'react'
 import '../../styles/home.css'
-
+import Pagination from '../screens/pagination'
 import { UserContext } from '../../App'
 import { useNavigate, Link,useMatch,useResolvedPath } from 'react-router-dom'
 import M from 'materialize-css'
@@ -22,11 +22,14 @@ const Home = ()=>{
     // const [filteredData, setFilteredData] = useState(new Set());
     const [wordEntered, setWordEntered] = useState("");
     const [data, setData] = useState([]);
-
+   
+    const [loading, setLoading] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postPerPage] = useState(10)
     const [refreshData, setRefreshData] = useState([]);
 
     useEffect(()=>{
-            
+        //    setLoading(true); 
         fetch('/allpost', {
             headers:{
                 "Authorization":"Bearer " + localStorage.getItem("jwt")
@@ -37,7 +40,7 @@ const Home = ()=>{
             setData(result.posts)
             setRefreshData(result.posts);
         })
-
+        // setLoading(true);
     }, []);
 
     var searchWord  = "";
@@ -68,6 +71,25 @@ const Home = ()=>{
 
     };
 
+    const indexOfLastpost = currentPage * postPerPage;
+    const indexOfFirstpost = indexOfLastpost - postPerPage;
+    const currentData = refreshData.slice(indexOfFirstpost, indexOfLastpost)
+    const paginate = (pageNumber) => {
+        if(pageNumber > 0 && pageNumber <= Math.ceil(refreshData.length / postPerPage)){
+          setCurrentPage(pageNumber);
+        }
+        else{
+          if(pageNumber < 1){
+            setCurrentPage(1);
+          }
+          else{
+            setCurrentPage(Math.ceil(refreshData.length / postPerPage))
+          }
+          
+        }
+        
+    }
+
     const logoutUser = ()=>{
         localStorage.clear()
         dispatch({type:"CLEAR"})
@@ -75,6 +97,7 @@ const Home = ()=>{
         navigate('/')
     }
 
+    
     return(
         <>
                 <div>
@@ -136,7 +159,7 @@ const Home = ()=>{
 
                             // :
 
-                            refreshData.map(item =>{
+                            currentData.map(item =>{
                                 // console.log(item)
                                 return(
                                     <>  
@@ -154,7 +177,7 @@ const Home = ()=>{
                             })
 
                         }    
-
+                 <Pagination postsPerPage={postPerPage} totalposts={refreshData.length} paginate={paginate} currentPage={currentPage} />
                 </div>
                 <div></div>
                 </div>
