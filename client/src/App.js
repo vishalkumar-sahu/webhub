@@ -12,6 +12,7 @@ import Home from './components/screens/home.js';
 import Profile from './components/screens/profile';
 import AddSite from './components/screens/addsite';
 import ProfilePic from './components/screens/profilePic';
+import ViewProfile from './components/screens/viewProfile';
 
 import {reducer, initialState} from './reducers/userReducer'
 export const UserContext = createContext()
@@ -45,6 +46,7 @@ const Routing = ()=>{
         <Route path='/profile' element={<Profile />}/>
         <Route path='/addContribution' element={<AddSite />}/>
         <Route path='/profile/profilePic' element={<ProfilePic />} />
+        <Route path='/profile/:userid' element={<ViewProfile />} />
     </Routes>
   )
 }

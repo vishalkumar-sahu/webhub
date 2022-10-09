@@ -12,6 +12,8 @@ import { UserContext } from "../../App";
 import M from 'materialize-css'
 import { useNavigate } from 'react-router-dom';
 
+// import SearchBar from "./searchBar";
+
 export default function Navbar1() {
     // const path = window.location.pathname
     const {state, dispatch} = useContext(UserContext)
@@ -33,7 +35,8 @@ export default function Navbar1() {
         </div>
 
         <div className="searchbar1">
-           <input type="text" placeholder="Search..." id="searchbar"/>
+           {/* <input type="text" placeholder="Search..." id="searchbar"/> */}
+           {/* <SearchBar /> */}
         </div>
         <div>
         <ul>
