@@ -38,6 +38,27 @@ const Profile = ()=>{
         navigate('/addContribution');
     }
 
+    const deletePost = (postid)=>{
+
+        if(window.confirm("Are you sure to delete this post ??")){
+            fetch(`/deletepost/${postid}`, {
+                method : "delete",
+                headers:{
+                    Authorization:"Bearer " + localStorage.getItem("jwt")
+                }
+            })
+            .then(res => res.json())
+            .then(result =>{
+                console.log(result)
+                const newData = mypost.filter(item =>{
+                    return item._id !== result._id
+                })
+                setMyPost(newData)
+            })
+        } 
+       
+    }
+
     return (
         <>
             <div>
@@ -75,6 +96,7 @@ const Profile = ()=>{
                                     <>
                                         <li><a href={item.link} target="_blank" className="mainlink1">{item.title}</a><span className="date">-{item.date}</span><br></br>
                                         <span>Contributors : {state ? state.name : "loading..." } & {item.contributor}</span></li>
+                                        <button onClick={()=> deletePost(item._id)}> del</button>
                                     </>
                                 )
                             })
