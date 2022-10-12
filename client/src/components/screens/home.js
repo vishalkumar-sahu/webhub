@@ -98,21 +98,6 @@ const Home = ()=>{
         navigate('/')
     }
 
-    // const readMoreBtn = document.querySelector('.button3');
-    // const text = document.querySelector('.text')
-
-    // readMoreBtn.addEventListener('click',(e)=>{
-    //         text.classList.toggle('show-more');
-    // })
-
-    // const ReadMoreReadLess = (children) =>{
-       
-    //         <div className="read-more-read-less">
-    //         <span>children</span>
-    //         <button className="button3">see more</button>
-    //         </div>
-        
-    // }
     return(
         <>
                 <div>
