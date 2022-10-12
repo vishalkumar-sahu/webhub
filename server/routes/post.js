@@ -115,6 +115,25 @@ router.put('/edit/:postId',requirelogin, (req , res)=>{
     })
 })
 
+router.put('/increaseCount', requirelogin, (req, res)=>{
+
+    Post.findByIdAndUpdate( 
+        { "_id": req.body.postId},
+        { $inc: { visitorsCount : 1}}
+    ,{
+        new : true
+    })
+    .populate("postedBy", "_id name username pic")
+    .exec((err, result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }
+        else{
+            // console.log(result)
+            res.json(result)
+        }
+    })
+})
 
 
 module.exports = router
