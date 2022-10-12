@@ -14,7 +14,7 @@ const Signup = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     
-    const PostData = () =>{
+    const PostData = (e) =>{
 
         localStorage.setItem("email", email);
         localStorage.setItem("name", name);
@@ -43,24 +43,35 @@ const Signup = () => {
             })
             .then(res => res.json())
             .then(data=>{
+                // navigate('/verify')
                 // console.log("send mail");
-                if(data.message){
-                    // console.log(data.message);
-                    M.toast({html: data.message, classes:"#43a047 green darken-1"});
-                    navigate('/verify');
+                // if(data.message != undefined){
+                //     // console.log(data.message);
+                //     // M.toast({html: data.message, classes:"#43a047 green darken-1"});
+                //     navigate('/verify');
                     
             
+                // }
+                // else{
+                //     M.toast({html: data.error, classes:"#c62828 red darken-3"})
+                //     navigate('/');
+                //     // console.log(data.error);
+                // }
+                if(data.error){
+                    M.toast({html: data.error, classes:"#c62828 red darken-3"})
                 }
                 else{
-                    M.toast({html: data.error, classes:"#c62828 red darken-3"})
-                    // navigate('/verify');
-                    // console.log(data.error);
+                    M.toast({html: data.message, classes:"#43a047 green darken-1"})
+                    navigate('/verify')
                 }
             }).catch(err=>{
                 console.log(err)
             })
+
+            e.preventDefault();
+
         }
-        
+
     }
 
     
@@ -83,7 +94,7 @@ const Signup = () => {
                             <div className='mask gradient-custom-3'></div>
                             <MDBCard className='m-0' >
                                 <MDBCardBody className='px-4'>
-                                <form method='post'  onSubmit={()=>PostData()}>
+                                <form method='post'  onSubmit={PostData}>
                                 <h2 className="text-uppercase text-center mb-4">Create an account</h2>
                                 <MDBInput wrapperClass='mb-2' label='UserName' name='username' size='lg' id='form1' type='text' value={username} onChange={(e)=>setUsername(e.target.value)} required/>
                                 <MDBInput wrapperClass='mb-2' label='Your Name' name='name' size='lg' id='form1' type='text' value={name} onChange={(e)=>setName(e.target.value)} required/>

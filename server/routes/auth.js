@@ -36,9 +36,15 @@ router.post('/signup', (req, res)=>{
                     {
                         console.log(verification.sid)
                         console.log("Verification email sent");
-                        res.status(200).json({message:"Verfication send"});
+                        // res.status(200);
+                        res.status(200).json({message:"Otp send !"});
+                        // res.status(400).send("Otp send !!!");
+                        
+                    })
                     
-                    });
+            // return res.status(200);
+            // res.status(200);
+            // res.status(200).json({message:"Otp send !"});
             
         }
         else{
