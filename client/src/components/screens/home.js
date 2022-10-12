@@ -99,43 +99,6 @@ const Home = ()=>{
     }
 
     
-    const increaseCount = (postId)=>{
-
-        // console.log(postId);
-
-        fetch("/increaseCount",{
-            method : "put",
-            headers : {
-                "Authorization" : "Bearer " + localStorage.getItem("jwt"),
-                "Content-Type" : "application/json"
-            },
-            body:JSON.stringify({
-                postId,
-            })
-
-        })
-        .then(res => res.json())
-        .then(result=>{
-            const newData = data.map(item =>{
-                // console.log(item)
-                if(item._id == result._id){
-                    return result
-                }
-                else{
-                    return item
-                }
-            })
-
-            setData(newData);
-            setRefreshData(newData);
-        })
-        .catch(err=>{
-            console.log(err)
-        })
-    }
-
-
-    
     return(
         <>
                 <div>
