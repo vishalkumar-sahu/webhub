@@ -54,6 +54,7 @@ router.get('/mypost', requirelogin, (req, res)=>{
         console.log(err);
     })
 })
+
 router.delete('/deletepost/:postID', requirelogin, (req, res)=>{
     Post.findOne({_id : req.params.postID})
     .populate("postedBy", "_id")
