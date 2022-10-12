@@ -1,4 +1,5 @@
 import React,{useState, useEffect, useContext} from 'react'
+
 import '../../styles/home.css'
 import Pagination from '../screens/pagination'
 import ReadMoreReadLess from '../screens/readmorereadless'
@@ -31,7 +32,7 @@ const Home = ()=>{
     const [refreshData, setRefreshData] = useState([]);
 
     useEffect(()=>{
-        //    setLoading(true); 
+
         fetch('/allpost', {
             headers:{
                 "Authorization":"Bearer " + localStorage.getItem("jwt")
@@ -42,7 +43,7 @@ const Home = ()=>{
             setData(result.posts)
             setRefreshData(result.posts);
         })
-        // setLoading(true);
+
     }, []);
     var searchWord  = "";
     const handleFilter = (event) => {
@@ -164,8 +165,9 @@ const Home = ()=>{
                                 return(
                                     <>  
                                         <div className="linkcontaint">
-                                        <a href={item.link} target="_blank" className="mainlink" rel="noreferrer noopener">{item.title}</a>
-                                        <span style={{marginLeft : '100px'}} >By - <Link to={item.postedBy ? item.postedBy._id != state._id ? "/profile/" + item.postedBy._id : "/profile" : "loading..."}>{item.postedBy ? item.postedBy.username : "loading..."}</Link></span><br></br>
+                                        <a href={item.link} target="_blank" className="mainlink" rel="noreferrer noopener" onClick={()=> increaseCount(item._id)}>{item.title}</a>
+                                        <span style={{marginLeft : '80px'}} onClick={()=> increaseCount(item._id)}>By - <Link to={item.postedBy ? item.postedBy._id != state._id ? "/profile/" + item.postedBy._id : "/profile" : "loading..."}>{item.postedBy ? item.postedBy.username : "loading..."}</Link></span>
+                                        <span style={{marginLeft : '120px'}}>Visitors Count - {item.visitorsCount}</span><br></br>
                                         <span><a href={item.link} target="_balnk" className="link" rel="noreferrer noopener">{item.link}</a></span><br></br>
                                         <span className="date">Release Date : {item.date}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <span className="contributedby">Contributed By : {item.contributor}</span><br></br>
