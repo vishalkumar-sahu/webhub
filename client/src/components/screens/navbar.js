@@ -45,7 +45,7 @@ export default function Navbar1() {
             
             <CustomLLink to="/profile" className = "icon1"><CgProfile /></CustomLLink>
             {/* <CustomLLink to="/signup" className onClick={()=>logoutUser()}></CustomLLink> */}
-            <button onClick={()=>logoutUser()}><MdLogout /></button>
+            <button onClick={()=>logoutUser()} id="logout3"><MdLogout /></button>
         </ul>
         </div>
     </nav>
