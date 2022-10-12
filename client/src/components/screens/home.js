@@ -111,7 +111,14 @@ const Home = ()=>{
 
     const indexOfLastpost = currentPage * postPerPage;
     const indexOfFirstpost = indexOfLastpost - postPerPage;
-    const currentData = refreshData.slice(indexOfFirstpost, indexOfLastpost)
+    var currentData = refreshData.slice(indexOfFirstpost, indexOfLastpost)
+
+    const sorted = currentData.sort((a, b) => {
+        return b.visitorsCount - a.visitorsCount;
+    });
+
+    currentData = sorted;
+
     const paginate = (pageNumber) => {
         if(pageNumber > 0 && pageNumber <= Math.ceil(refreshData.length / postPerPage)){
           setCurrentPage(pageNumber);
@@ -127,6 +134,26 @@ const Home = ()=>{
         }
         
     }
+
+    // console.log(currentData);
+
+    
+    // const sortByVisitorsCount = () => {
+
+    //     console.log(refreshData);
+
+    //     const sorted = refreshData.sort((a, b) => {
+    //       return b.visitorsCount - a.visitorsCount;
+    //     });
+
+    //     console.log(sorted);
+
+    //     setRefreshData(sorted);
+    //     // alert(sorted[0].name);
+        
+    // };
+    
+
 
     const logoutUser = ()=>{
         localStorage.clear()
@@ -218,6 +245,7 @@ const Home = ()=>{
                         }    
                  <Pagination postsPerPage={postPerPage} totalposts={refreshData.length} paginate={paginate} currentPage={currentPage} />
                 </div>
+                {/* <div><button onClick={sortByVisitorsCount} style={{marginTop : "100px"}}>Sort by HITS Count</button></div> */}
                 <div></div>
                 </div>
                 <footer className="footerh">
