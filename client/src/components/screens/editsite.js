@@ -2,12 +2,13 @@ import React, {useEffect, useState, useContext} from "react";
 import '../../styles/home.css'
 import { UserContext } from "../../App";
 
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useParams } from "react-router-dom";
 import Navbar from "./navbar"
 
 import M from 'materialize-css'
 
-const AddSite = ()=>{
+const EditSite = ()=>{
 
     const navigate = useNavigate()
     const [title, setTitle] = useState("");
@@ -16,10 +17,51 @@ const AddSite = ()=>{
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
 
-    const postDetails = ()=>{
-        
-        fetch("/addContribution",{
-            method : "post",
+    const [post, setPost] = useState(null)
+    const {postId} = useParams();
+    // console.log(postId)
+
+    useEffect(()=>{
+    // const getPost = ()=>{
+        // loadDataOnlyOnce();
+        fetch(`/editPost/${postId}`,{
+            method : "get",
+            headers : {
+                "Authorization" : "Bearer " + localStorage.getItem("jwt")
+            },
+
+        })
+        .then(res => res.json())
+        .then(result =>{
+            
+            console.log(result.post)
+            // setPost(result.post)
+            // console.log(post);
+            setContributor(result.post.contributor);
+            // var dat/e1 = post.date;
+            setDate(result.post.date.slice(0, 10));
+            setDescription(result.post.description);
+            setTitle(result.post.title);
+            setLink(result.post.link);
+            
+            // date1 = date1.slice(0, 10);
+            // setDate(date1);
+            // date = date.substring(0, 10);
+            // console.log(date)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+
+    // }
+    // getPost();
+
+    }, []);
+
+
+    const postDetails = (e)=>{
+         fetch(`/edit/${postId}`,{
+            method : "put",
             headers : {
                 "Authorization" : "Bearer " + localStorage.getItem("jwt"),
                 "Content-Type" : "application/json"
@@ -39,12 +81,15 @@ const AddSite = ()=>{
                 return M.toast({html: data.error, classes:"#c62828 red darken-3"})
             }
             else{
-                M.toast({html: "Created post successfully !!!", classes:"#43a047 green darken-1"})
+                M.toast({html: "Post updated successfully !!!", classes:"#43a047 green darken-1"})
                 navigate('/home')
+                // data.preventDefault();
             }
         }).catch(err=>{
             console.log(err)
         })
+
+        e.preventDefault();
     }
 
     return (
@@ -53,7 +98,7 @@ const AddSite = ()=>{
             <div className="adduppage">
                 <div></div>
             <div className="addsite1">
-                <form className="addupform" method="post">
+                <form className="addupform" method="post" onSubmit={postDetails}>
                 
                     <div>
                         <label className="label1">Title for site :</label><br></br>
@@ -81,7 +126,7 @@ const AddSite = ()=>{
                     </div>
                     <br></br>
                     <div id="submit">
-                            <input type="submit" value="Submit" id="submit1" onClick={()=>postDetails()}></input>
+                            <input type="submit" value="Submit" id="submit1" onClick={()=>postDetails(e)}></input>
                     </div>
                     
                 </form>
@@ -94,4 +139,4 @@ const AddSite = ()=>{
 
 };
 
-export default AddSite;
+export default EditSite;
