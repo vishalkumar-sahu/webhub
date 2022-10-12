@@ -102,6 +102,7 @@ body{
 
 .homepage{
   display: grid;
+  margin-top: 63px !important;
   grid-template-columns: 15% 60% 25%;
   background-color:  #f2eaea;
 }
@@ -181,6 +182,7 @@ body{
 } 
 .profilepage{
 display: grid;
+margin-top: 63px;
 grid-template-columns: 25% 50% 25%;
 background-color:  #f2eaea;
 
