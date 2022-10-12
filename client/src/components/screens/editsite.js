@@ -126,7 +126,7 @@ const EditSite = ()=>{
                     </div>
                     <br></br>
                     <div id="submit">
-                            <input type="submit" value="Submit" id="submit1" onClick={()=>postDetails(e)}></input>
+                            <input type="submit" value="Submit" id="submit1"></input>
                     </div>
                     
                 </form>
