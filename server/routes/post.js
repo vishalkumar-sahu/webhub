@@ -54,6 +54,7 @@ router.get('/mypost', requirelogin, (req, res)=>{
         console.log(err);
     })
 })
+
 router.delete('/deletepost/:postID', requirelogin, (req, res)=>{
     Post.findOne({_id : req.params.postID})
     .populate("postedBy", "_id")
@@ -69,6 +70,67 @@ router.delete('/deletepost/:postID', requirelogin, (req, res)=>{
             .catch(err =>{
                 console.log(err)
             })
+        }
+    })
+})
+
+router.get('/editpost/:postID',requirelogin,(req , res)=>{
+    Post.findOne({_id : req.params.postID})
+    .populate("postedBy", "_id")
+    .then(post =>{
+        console.log(post)
+        res.send({post});
+    })
+    .catch(err =>{
+        console.log(err);
+    })
+})
+
+
+router.put('/edit/:postId',requirelogin, (req , res)=>{
+    const {title, link, contributor, date, description} = req.body
+
+    Post.findByIdAndUpdate({_id : req.params.postId},{
+        $set : {
+            title : title,
+            link : link,
+            contributor : contributor,
+            date : date,
+            description : description
+        }},
+        {
+            new:true,
+            runValidators:true
+        }
+    )
+    .populate("postedBy", "_id name username pic")
+    .exec((err, result) => {
+        if(err){
+            return res.status(422).json({error : err})
+        }
+        else{
+            // res.redirect("/profile");
+            res.status(200).json({message : "Edited successful !!!"})
+        }
+    })
+})
+
+router.put('/increaseCount', requirelogin, (req, res)=>{
+
+    Post.findByIdAndUpdate( 
+        { "_id": req.body.postId},
+        { $inc: { visitorsCount : 1}}
+    ,{
+        new : true
+    })
+    .populate("postedBy", "_id name username pic")
+    .exec((err, result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }
+        else{
+            // console.log(result)
+            res.json(result)
         }
     })
 })

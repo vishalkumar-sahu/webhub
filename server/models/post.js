@@ -30,6 +30,10 @@ const postSchema = new mongoose.Schema({
         type : String,
         required : true,
         
+    },
+    visitorsCount: {
+        type : Number,
+        default : 0
     }
     
 })

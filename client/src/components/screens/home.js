@@ -1,4 +1,5 @@
 import React,{useState, useEffect, useContext} from 'react'
+
 import '../../styles/home.css'
 import Pagination from '../screens/pagination'
 import ReadMoreReadLess from '../screens/readmorereadless'
@@ -25,13 +26,13 @@ const Home = ()=>{
     const [wordEntered, setWordEntered] = useState("");
     const [data, setData] = useState([]);
    
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const [postPerPage] = useState(10)
     const [refreshData, setRefreshData] = useState([]);
 
     useEffect(()=>{
-        //    setLoading(true); 
+
         fetch('/allpost', {
             headers:{
                 "Authorization":"Bearer " + localStorage.getItem("jwt")
@@ -42,9 +43,44 @@ const Home = ()=>{
             setData(result.posts)
             setRefreshData(result.posts);
         })
-        // setLoading(true);
+
     }, []);
 
+    const increaseCount = (postId)=>{
+
+        // console.log(postId);
+
+        fetch("/increaseCount",{
+            method : "put",
+            headers : {
+                "Authorization" : "Bearer " + localStorage.getItem("jwt"),
+                "Content-Type" : "application/json"
+            },
+            body:JSON.stringify({
+                postId,
+            })
+
+        })
+        .then(res => res.json())
+        .then(result=>{
+            const newData = data.map(item =>{
+                // console.log(item)
+                if(item._id == result._id){
+                    return result
+                }
+                else{
+                    return item
+                }
+            })
+
+            setData(newData);
+            setRefreshData(newData);
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
+    
     var searchWord  = "";
     const handleFilter = (event) => {
 
@@ -99,21 +135,6 @@ const Home = ()=>{
         navigate('/')
     }
 
-    // const readMoreBtn = document.querySelector('.button3');
-    // const text = document.querySelector('.text')
-
-    // readMoreBtn.addEventListener('click',(e)=>{
-    //         text.classList.toggle('show-more');
-    // })
-
-    // const ReadMoreReadLess = (children) =>{
-       
-    //         <div className="read-more-read-less">
-    //         <span>children</span>
-    //         <button className="button3">see more</button>
-    //         </div>
-        
-    // }
     return(
         <>
                 <div>
@@ -180,8 +201,9 @@ const Home = ()=>{
                                 return(
                                     <>  
                                         <div className="linkcontaint">
-                                        <a href={item.link} target="_blank" className="mainlink" rel="noreferrer noopener">{item.title}</a>
-                                        <span style={{marginLeft : '100px'}} >By - <Link to={item.postedBy ? item.postedBy._id != state._id ? "/profile/" + item.postedBy._id : "/profile" : "loading..."}>{item.postedBy ? item.postedBy.username : "loading..."}</Link></span><br></br>
+                                        <a href={item.link} target="_blank" className="mainlink" rel="noreferrer noopener" onClick={()=> increaseCount(item._id)}>{item.title}</a>
+                                        <span style={{marginLeft : '80px'}} onClick={()=> increaseCount(item._id)}>By - <Link to={item.postedBy ? item.postedBy._id != state._id ? "/profile/" + item.postedBy._id : "/profile" : "loading..."}>{item.postedBy ? item.postedBy.username : "loading..."}</Link></span>
+                                        <span style={{marginLeft : '120px'}}>Visitors Count - {item.visitorsCount}</span><br></br>
                                         <span><a href={item.link} target="_balnk" className="link" rel="noreferrer noopener">{item.link}</a></span><br></br>
                                         <span className="date">Release Date : {item.date}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <span className="contributedby">Contributed By : {item.contributor}</span><br></br>
