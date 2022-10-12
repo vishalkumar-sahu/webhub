@@ -2,6 +2,8 @@ import React,{useState, useEffect, useContext} from 'react'
 
 import '../../styles/home.css'
 import Pagination from '../screens/pagination'
+import ReadMoreReadLess from '../screens/readmorereadless'
+
 import { UserContext } from '../../App'
 import { useNavigate, Link,useMatch,useResolvedPath } from 'react-router-dom'
 import M from 'materialize-css'
@@ -24,7 +26,7 @@ const Home = ()=>{
     const [wordEntered, setWordEntered] = useState("");
     const [data, setData] = useState([]);
    
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const [postPerPage] = useState(10)
     const [refreshData, setRefreshData] = useState([]);
@@ -43,7 +45,6 @@ const Home = ()=>{
         })
 
     }, []);
-
     var searchWord  = "";
     const handleFilter = (event) => {
 
@@ -98,7 +99,6 @@ const Home = ()=>{
         navigate('/')
     }
 
-    
     return(
         <>
                 <div>
@@ -171,7 +171,8 @@ const Home = ()=>{
                                         <span><a href={item.link} target="_balnk" className="link" rel="noreferrer noopener">{item.link}</a></span><br></br>
                                         <span className="date">Release Date : {item.date}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <span className="contributedby">Contributed By : {item.contributor}</span><br></br>
-                                        <span>{item.description}</span>
+                                        {/* <span><ReadMoreReadLess>{item.description}</ReadMoreReadLess></span> */}
+                                        <span>{item.description.length < 200  ? item.description : <ReadMoreReadLess>{item.description}</ReadMoreReadLess>}</span>
                                         </div>
                                        
                                     </>
@@ -200,7 +201,7 @@ const Home = ()=>{
                             <span>Gandinagar</span>&nbsp;&nbsp;
                             <span><a href="https://goo.gl/maps/BnyE8YSgdGStrzUr8" target="_blank" className="footerlink" rel="noreferrer noopener"><GoLocation /></a></span>&nbsp;&nbsp;&nbsp;<br />
                             <span><a href="https://www.linkedin.com" className="footerlink" rel="noreferrer noopener" target="_blank"><AiOutlineLinkedin /></a></span>&nbsp;&nbsp;&nbsp;
-                            <span><a href="https://www.linkedin.com" className="footerlink" rel="noreferrer noopener" target="_blank"><CgMail /></a></span>&nbsp;&nbsp;&nbsp;
+                            <span><a href="https://www.gmail.com" className="footerlink" rel="noreferrer noopener" target="_blank"><CgMail /></a></span>&nbsp;&nbsp;&nbsp;
                         </div>
                     </div>
                 </footer>
