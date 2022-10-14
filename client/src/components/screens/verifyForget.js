@@ -12,8 +12,8 @@ const   ForgetPasswordOtp = () => {
     
     const email = localStorage.getItem("email");
 
-    const verifyForgetOTP = () =>{
-        fetch("/verifyForgetPasswordOtp",{
+    const verifyForgetOTP = (e) =>{
+        fetch("/verifyForgettenPassword",{
             method : "post",
             headers : {
                 "Content-Type" : "application/json",
@@ -38,6 +38,8 @@ const   ForgetPasswordOtp = () => {
         }).catch(err=>{
             console.log(err)
         })
+       
+        e.preventDefault();
         
     }
 
@@ -62,7 +64,7 @@ const   ForgetPasswordOtp = () => {
                             <MDBCard className='m-0' >
                             <MDBCardBody className='px-4'>
                                 <h2 className="text-uppercase text-center mb-4">OTP Verification</h2>
-                                <form method='post'>
+                                <form method='post' onSubmit={verifyForgetOTP}>
                                 <MDBInput wrapperClass='mb-3' label='Enter Otp' type="number" maxLength={6} minLength={6} name='otp' id='form1' value={otp} onChange={(e)=>setOtp(e.target.value)} required/>
                                 {/* <MDBInput wrapperClass='mb-2' label='Password' name='password' id='form2' type='password' value={password} onChange={(e)=>setPassword(e.target.value)} required/> */}
 
@@ -71,7 +73,7 @@ const   ForgetPasswordOtp = () => {
                                 <a href="!#">Forgot password?</a>
                                 </div> */}
 
-                                <input className="input_ele" type="submit" value="Submit Otp" onClick={()=>verifyForgetOTP()} />
+                                <input className="input_ele" type="submit" value="Submit Otp" />
                                 </form>
                                 {/* <MDBBtn className="mb-4">Sign in</MDBBtn> */}
 
