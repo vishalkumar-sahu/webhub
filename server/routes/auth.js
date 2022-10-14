@@ -183,7 +183,8 @@ router.post('/forgettenPassword', (req, res)=>{
                 .create({to: email, channel: 'email'})
                 .then(data => {
                     console.log(data);
-                    res.status(200).redirect("/verifyForgettenPassword");
+                    res.status(200).json({message:"Otp send !"});
+                    // res.status(200).redirect("/verifyForgettenPassword");
                     // console.log(localStorage.setItem("phone", phone));
                 })
                 .catch(err => {
@@ -221,8 +222,8 @@ router.post('/verifyForgettenPassword', async (req, res)=>{
                 })
                 .then(data => {
                     if (data.status === "approved") {
-                        res.status(200).redirect("/changePassword");
-                        // res.status(200).json({message:"Otp verified successfully !"});
+                        // res.status(200).redirect("/changePassword");
+                        res.status(200).json({message:"Otp verified successfully !"});
                         // res.redirect('/')
                     }
                     else{
