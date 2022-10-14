@@ -59,6 +59,13 @@ const Profile = ()=>{
        
     }
 
+    const editPost = (postId) => {
+
+        localStorage.setItem("postId" , postId );
+        navigate(`/editPost/${postId}`);
+    }
+
+
     return (
         <>
             <div>
@@ -97,6 +104,8 @@ const Profile = ()=>{
                                         <li><a href={item.link} target="_blank" className="mainlink1">{item.title}</a><span className="date">-{item.date}</span><br></br>
                                         <span>Contributors : {state ? state.name : "loading..." } & {item.contributor}</span></li>
                                         <button onClick={()=> deletePost(item._id)}> del</button>
+                                        <button onClick={()=> editPost(item._id)}> edit</button>
+                                    
                                     </>
                                 )
                             })

@@ -2,13 +2,13 @@ import React from 'react'
 
 const Pagination = ({ postsPerPage, totalposts, paginate, currentPage }) => {
     const pageNumbers = [];
-    console.log(totalposts);
-    console.log(postsPerPage);
+    // console.log(totalposts);
+    // console.log(postsPerPage);
     for(let i = 1; i <= Math.ceil(totalposts / postsPerPage); i++){
         pageNumbers.push(i);
     }
 
-    console.log(pageNumbers);
+    // console.log(pageNumbers);
 
   return (
       

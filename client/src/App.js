@@ -13,6 +13,7 @@ import Profile from './components/screens/profile';
 import AddSite from './components/screens/addsite';
 import ProfilePic from './components/screens/profilePic';
 import ViewProfile from './components/screens/viewProfile';
+import EditPost from './components/screens/editsite';
 
 import {reducer, initialState} from './reducers/userReducer'
 export const UserContext = createContext()
@@ -47,6 +48,7 @@ const Routing = ()=>{
         <Route path='/addContribution' element={<AddSite />}/>
         <Route path='/profile/profilePic' element={<ProfilePic />} />
         <Route path='/profile/:userid' element={<ViewProfile />} />
+        <Route path='/editPost/:postId' element={<EditPost />} />
     </Routes>
   )
 }

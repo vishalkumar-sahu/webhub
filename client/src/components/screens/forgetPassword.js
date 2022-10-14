@@ -12,7 +12,7 @@ const   ForgetPassword = () => {
     
     localStorage.setItem("email", email);
 
-    const sendOTP = () =>{
+    const sendOTP = (e) =>{
         fetch("/forgettenPassword",{
             method : "post",
             headers : {
@@ -32,12 +32,14 @@ const   ForgetPassword = () => {
             }
             else{
                 M.toast({html: data.message, classes:"#43a047 green darken-1"})
-                navigate('/verifyForgetPasswordOtp')
+                navigate('/verifyForgettenPassword')
             }
         }).catch(err=>{
             console.log(err)
         })
         
+        e.preventDefault();
+
     }
 
 
@@ -61,15 +63,15 @@ const   ForgetPassword = () => {
                             <MDBCard className='m-0' >
                             <MDBCardBody className='px-4'>
                                 <h2 className="text-uppercase text-center mb-4">Forget Password</h2>
-                                <form method='post'>
-                                <MDBInput wrapperClass='mb-2' label='Your Email' name='email' size='lg' id='form2' type='email' value={email} onChange={(e)=>setEmail(e.target.value)} required/>
+                                <form method='post' onSubmit={sendOTP}>
+                                    <MDBInput wrapperClass='mb-2' label='Your Email' name='email' size='lg' id='form2' type='email' value={email} onChange={(e)=>setEmail(e.target.value)} required/>
 
-                                {/* <div className="d-flex justify-content-between mx-2 mb-3">
-                                <div></div>
-                                <a href="!#">Forgot password?</a>
-                                </div> */}
+                                    {/* <div className="d-flex justify-content-between mx-2 mb-3">
+                                    <div></div>
+                                    <a href="!#">Forgot password?</a>
+                                    </div> */}
 
-                                <input className="input_ele" type="submit" value="Send Otp" onClick={()=>sendOTP()} />
+                                    <input className="input_ele" type="submit" value="Send Otp" />
                                 </form>
                                 {/* <MDBBtn className="mb-4">Sign in</MDBBtn> */}
 

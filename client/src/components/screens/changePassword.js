@@ -12,7 +12,7 @@ const   ChangePassword = () => {
     
     const email = localStorage.getItem("email");
 
-    const changePassword = () =>{
+    const changePassword = (e) =>{
         fetch("/changePassword",{
             method : "post",
             headers : {
@@ -40,6 +40,8 @@ const   ChangePassword = () => {
             console.log(err)
         })
         
+        e.preventDefault();
+
     }
 
 
@@ -63,7 +65,7 @@ const   ChangePassword = () => {
                             <MDBCard className='m-0' >
                             <MDBCardBody className='px-4'>
                                 <h2 className="text-uppercase text-center mb-4">Password Change</h2>
-                                <form method='post'>
+                                <form method='post' onSubmit={changePassword}>
                                 {/* <MDBInput wrapperClass='mb-3' label='Enter Otp' type="number" maxLength={6} minLength={6} name='otp' id='form1' value={otp} onChange={(e)=>setOtp(e.target.value)} required/> */}
                                 <MDBInput wrapperClass='mb-2' label='Password' name='password' id='form2' type='password' value={password} onChange={(e)=>setPassword(e.target.value)} required/>
 
@@ -72,7 +74,7 @@ const   ChangePassword = () => {
                                 <a href="!#">Forgot password?</a>
                                 </div> */}
 
-                                <input className="input_ele" type="submit" value="Change Password" onClick={()=>changePassword()} />
+                                <input className="input_ele" type="submit" value="Change Password" />
                                 </form>
                                 {/* <MDBBtn className="mb-4">Sign in</MDBBtn> */}
 

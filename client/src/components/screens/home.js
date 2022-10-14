@@ -1,6 +1,9 @@
 import React,{useState, useEffect, useContext} from 'react'
+
 import '../../styles/home.css'
 import Pagination from '../screens/pagination'
+import ReadMoreReadLess from '../screens/readmorereadless'
+
 import { UserContext } from '../../App'
 import { useNavigate, Link,useMatch,useResolvedPath } from 'react-router-dom'
 import M from 'materialize-css'
@@ -23,13 +26,13 @@ const Home = ()=>{
     const [wordEntered, setWordEntered] = useState("");
     const [data, setData] = useState([]);
    
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const [postPerPage] = useState(10)
     const [refreshData, setRefreshData] = useState([]);
 
     useEffect(()=>{
-        //    setLoading(true); 
+
         fetch('/allpost', {
             headers:{
                 "Authorization":"Bearer " + localStorage.getItem("jwt")
@@ -40,9 +43,44 @@ const Home = ()=>{
             setData(result.posts)
             setRefreshData(result.posts);
         })
-        // setLoading(true);
+
     }, []);
 
+    const increaseCount = (postId)=>{
+
+        // console.log(postId);
+
+        fetch("/increaseCount",{
+            method : "put",
+            headers : {
+                "Authorization" : "Bearer " + localStorage.getItem("jwt"),
+                "Content-Type" : "application/json"
+            },
+            body:JSON.stringify({
+                postId,
+            })
+
+        })
+        .then(res => res.json())
+        .then(result=>{
+            const newData = data.map(item =>{
+                // console.log(item)
+                if(item._id == result._id){
+                    return result
+                }
+                else{
+                    return item
+                }
+            })
+
+            setData(newData);
+            setRefreshData(newData);
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
+    
     var searchWord  = "";
     const handleFilter = (event) => {
 
@@ -73,7 +111,14 @@ const Home = ()=>{
 
     const indexOfLastpost = currentPage * postPerPage;
     const indexOfFirstpost = indexOfLastpost - postPerPage;
-    const currentData = refreshData.slice(indexOfFirstpost, indexOfLastpost)
+    var currentData = refreshData.slice(indexOfFirstpost, indexOfLastpost)
+
+    const sorted = currentData.sort((a, b) => {
+        return b.visitorsCount - a.visitorsCount;
+    });
+
+    currentData = sorted;
+
     const paginate = (pageNumber) => {
         if(pageNumber > 0 && pageNumber <= Math.ceil(refreshData.length / postPerPage)){
           setCurrentPage(pageNumber);
@@ -90,6 +135,26 @@ const Home = ()=>{
         
     }
 
+    // console.log(currentData);
+
+    
+    // const sortByVisitorsCount = () => {
+
+    //     console.log(refreshData);
+
+    //     const sorted = refreshData.sort((a, b) => {
+    //       return b.visitorsCount - a.visitorsCount;
+    //     });
+
+    //     console.log(sorted);
+
+    //     setRefreshData(sorted);
+    //     // alert(sorted[0].name);
+        
+    // };
+    
+
+
     const logoutUser = ()=>{
         localStorage.clear()
         dispatch({type:"CLEAR"})
@@ -97,7 +162,6 @@ const Home = ()=>{
         navigate('/')
     }
 
-    
     return(
         <>
                 <div>
@@ -164,12 +228,14 @@ const Home = ()=>{
                                 return(
                                     <>  
                                         <div className="linkcontaint">
-                                        <a href={item.link} target="_blank" className="mainlink" rel="noreferrer noopener">{item.title}</a>
-                                        <span style={{marginLeft : '100px'}} >By - <Link to={item.postedBy ? item.postedBy._id != state._id ? "/profile/" + item.postedBy._id : "/profile" : "loading..."}>{item.postedBy ? item.postedBy.username : "loading..."}</Link></span><br></br>
+                                        <a href={item.link} target="_blank" className="mainlink" rel="noreferrer noopener" onClick={()=> increaseCount(item._id)}>{item.title}</a>
+                                        <span style={{marginLeft : '80px'}} onClick={()=> increaseCount(item._id)}>By - <Link to={item.postedBy ? item.postedBy._id != state._id ? "/profile/" + item.postedBy._id : "/profile" : "loading..."}>{item.postedBy ? item.postedBy.username : "loading..."}</Link></span>
+                                        <span style={{marginLeft : '120px'}}>Visitors Count - {item.visitorsCount}</span><br></br>
                                         <span><a href={item.link} target="_balnk" className="link" rel="noreferrer noopener">{item.link}</a></span><br></br>
                                         <span className="date">Release Date : {item.date}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <span className="contributedby">Contributed By : {item.contributor}</span><br></br>
-                                        <span>{item.description}</span>
+                                        {/* <span><ReadMoreReadLess>{item.description}</ReadMoreReadLess></span> */}
+                                        <span>{item.description.length < 200  ? item.description : <ReadMoreReadLess>{item.description}</ReadMoreReadLess>}</span>
                                         </div>
                                        
                                     </>
@@ -179,6 +245,7 @@ const Home = ()=>{
                         }    
                  <Pagination postsPerPage={postPerPage} totalposts={refreshData.length} paginate={paginate} currentPage={currentPage} />
                 </div>
+                {/* <div><button onClick={sortByVisitorsCount} style={{marginTop : "100px"}}>Sort by HITS Count</button></div> */}
                 <div></div>
                 </div>
                 <footer className="footerh">
@@ -198,7 +265,7 @@ const Home = ()=>{
                             <span>Gandinagar</span>&nbsp;&nbsp;
                             <span><a href="https://goo.gl/maps/BnyE8YSgdGStrzUr8" target="_blank" className="footerlink" rel="noreferrer noopener"><GoLocation /></a></span>&nbsp;&nbsp;&nbsp;<br />
                             <span><a href="https://www.linkedin.com" className="footerlink" rel="noreferrer noopener" target="_blank"><AiOutlineLinkedin /></a></span>&nbsp;&nbsp;&nbsp;
-                            <span><a href="https://www.linkedin.com" className="footerlink" rel="noreferrer noopener" target="_blank"><CgMail /></a></span>&nbsp;&nbsp;&nbsp;
+                            <span><a href="https://www.gmail.com" className="footerlink" rel="noreferrer noopener" target="_blank"><CgMail /></a></span>&nbsp;&nbsp;&nbsp;
                         </div>
                     </div>
                 </footer>
