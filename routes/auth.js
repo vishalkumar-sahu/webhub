@@ -12,7 +12,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config({path: './config.env'});
 
-const requireLogin = require('../middleware/requirelogin');
+const requireLogin = require('../server/middleware/requirelogin');
 
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN)
 
