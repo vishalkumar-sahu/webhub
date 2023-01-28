@@ -43,7 +43,8 @@ const Login = () => {
                 
                 navigate('/home')
             }
-        }).catch(err=>{
+        })
+        .catch(err=>{
             console.log(err)
         })
     
